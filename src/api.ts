@@ -1,6 +1,5 @@
 import axios from "axios"
-import * as fs from "fs"
-import { debounce } from "./utils"
+import { contextRef } from "./extension"
 
 interface IGrammarResult {
   range: number[]
@@ -21,18 +20,12 @@ interface IPool {
 class TextResultPool {
   private _pool: IPool = {}
 
-  private static _path = "/__eglint/__cache/__text_result_pool.json"
-
   private static _instance: TextResultPool
 
   static getInstance(): TextResultPool {
-    let obj = {}
-
-    try {
-      obj = require(TextResultPool._path)
-    } catch (error) {
-      console.error(error)
-    }
+    const obj: IPool =
+      contextRef.current?.globalState.get("TEXT_RESULT_POOL") || {}
+    console.log("getInstance", obj)
 
     if (!TextResultPool._instance) {
       TextResultPool._instance = new TextResultPool(obj)
@@ -50,26 +43,20 @@ class TextResultPool {
   }
   set(key: string, result: Array<IGrammarResult>) {
     this._pool[key] = result
-    try {
-      debounce(fs.writeFile, 100)(
-        TextResultPool._path,
-        JSON.stringify(this._pool),
-        (error: any) => {
-          console.error(error)
-        }
-      )
-    } catch (error) {
-      console.error(error)
-    }
+    contextRef.current?.globalState.update("TEXT_RESULT_POOL", this._pool)
+    const obj: IPool =
+      contextRef.current?.globalState.get("TEXT_RESULT_POOL") || {}
+    console.log("set", obj)
   }
 }
 
-const textResultPool = TextResultPool.getInstance()
-
 export async function getGingerCheck(text: string) {
+  const textResultPool = TextResultPool.getInstance()
+
   const one = textResultPool.get(text)
   // one 可能是空数组
   if (one && Array.isArray(one)) {
+    console.log("hit storage", one)
     return one
   }
 
@@ -93,7 +80,6 @@ export async function getGingerCheck(text: string) {
         }
       }) || []
 
-    console.log(rs)
     textResultPool.set(text, rs)
     return rs
   } catch (error) {

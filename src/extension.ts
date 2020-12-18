@@ -2,7 +2,13 @@ import * as vscode from "vscode"
 import { grammarCheckerInit } from "./grammar"
 import { registerStatusBar } from "./statusBar"
 
+export const contextRef: { current: undefined | vscode.ExtensionContext } = {
+  current: undefined,
+}
+
 export function activate(context: vscode.ExtensionContext) {
+  contextRef.current = context
+
   registerStatusBar(context)
   grammarCheckerInit(context)
 

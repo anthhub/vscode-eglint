@@ -1,20 +1,19 @@
-export const debounce = <T extends Function>(
+export const debounce = <T extends (...args: T[]) => any>(
   func: Function,
   time: number
-): T => {
+) => {
   let timer: NodeJS.Timeout | null
-
-  const fn = () => {
+  const fn = (...args: T[]) => {
     if (timer) {
       clearTimeout(timer)
       timer = null
     }
     timer = setTimeout(() => {
-      func()
+      func(...args)
     }, time)
   }
 
-  return (fn as unknown) as T
+  return fn
 }
 
 export const throttle = (func: Function, time: number) => {
