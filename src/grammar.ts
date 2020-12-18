@@ -2,6 +2,7 @@ import * as vscode from "vscode"
 import { debounce } from "./utils"
 import { getGingerCheck } from "./api"
 
+// A English grammar Linter.
 const collection = vscode.languages.createDiagnosticCollection("eglint")
 
 export function grammarCheckerInit(context: vscode.ExtensionContext) {
@@ -58,7 +59,7 @@ async function updateDecorations() {
   const diagnostics: vscode.Diagnostic[] = []
 
   await Promise.all(
-    matchs.slice(0, 1).map(async (match) => {
+    matchs.map(async (match) => {
       const results = await getGingerCheck(match.sentence || "")
       const diags: vscode.Diagnostic[] =
         results?.map(({ to, from, suggest }) => {

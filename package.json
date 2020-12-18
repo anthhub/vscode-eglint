@@ -1,13 +1,15 @@
 {
   "name": "eglint",
   "displayName": "eglint",
-  "description": "",
-  "version": "0.0.1",
+  "description": "An English grammar Linter",
+  "publisher": "anthhub",
+  "version": "0.0.2",
+  "icon": "logo.png",
   "engines": {
     "vscode": "^1.52.0"
   },
   "categories": [
-    "Other"
+    "Linters"
   ],
   "activationEvents": [
     "*"

@@ -15,6 +15,7 @@ const options = {
 const TEXT_RESULT_POOL: { [key: string]: Array<IGrammarResult> } = {}
 
 export async function getGingerCheck(text: string) {
+  console.log("text",text)
   const one = TEXT_RESULT_POOL[text]
   // one 可能是空数组
   if (one && Array.isArray(one)) {
