@@ -1,7 +1,9 @@
 import * as vscode from "vscode"
 import { grammarCheckerInit } from "./grammar"
+import { registerStatusBar } from "./statusBar"
 
 export function activate(context: vscode.ExtensionContext) {
+  registerStatusBar(context)
   grammarCheckerInit(context)
 
   let disposable = vscode.commands.registerCommand("eglint.helloWorld", () => {
