@@ -5,12 +5,12 @@ interface IGrammarResult {
   range: number[]
   from: number
   to: number
-  suggest: string
+  suggests: string[]
 }
 
 const API_KEY = "6ae0c3a0-afdc-4532-a810-82ded0054236"
 const options = {
-  timeout: 5000,
+  timeout: 5000 * 10,
 }
 
 interface IPool {
@@ -25,7 +25,7 @@ class TextResultPool {
   static getInstance(): TextResultPool {
     const obj: IPool =
       contextRef.current?.globalState.get("TEXT_RESULT_POOL") || {}
-    console.log("getInstance", obj)
+    // console.log("getInstance", obj)
 
     if (!TextResultPool._instance) {
       TextResultPool._instance = new TextResultPool(obj)
@@ -34,7 +34,7 @@ class TextResultPool {
     return TextResultPool._instance
   }
 
-  constructor(object: IPool) {
+  private constructor(object: IPool) {
     this._pool = object
   }
 
@@ -44,19 +44,23 @@ class TextResultPool {
   set(key: string, result: Array<IGrammarResult>) {
     this._pool[key] = result
     contextRef.current?.globalState.update("TEXT_RESULT_POOL", this._pool)
-    const obj: IPool =
-      contextRef.current?.globalState.get("TEXT_RESULT_POOL") || {}
-    console.log("set", obj)
   }
 }
 
 export async function getGingerCheck(text: string) {
+  if (text === "") {
+    return []
+  }
+
+  console.log("getGingerCheck ", text)
+
   const textResultPool = TextResultPool.getInstance()
 
-  const one = textResultPool.get(text)
+  const one = textResultPool.get(text.trim())
+
   // one 可能是空数组
-  if (one && Array.isArray(one)) {
-    console.log("hit storage", one)
+  if (Array.isArray(one)) {
+    console.log("hit storage", text, one)
     return one
   }
 
@@ -69,6 +73,8 @@ export async function getGingerCheck(text: string) {
     const { data } = await axios.get(url, options)
     const rs: IGrammarResult[] =
       data?.LightGingerTheTextResult?.map((result: any) => {
+        console.log("LightGingerTheTextResult.result", result)
+
         const from = result.From
         const to = result.To + 1
         const range = [from, to]
@@ -76,11 +82,13 @@ export async function getGingerCheck(text: string) {
           range,
           from,
           to,
-          suggest: result?.Suggestions?.[0]?.Text || "",
+          suggests:
+            result?.Suggestions?.map((item: { Text: string }) => item.Text) ||
+            [],
         }
       }) || []
 
-    textResultPool.set(text, rs)
+    textResultPool.set(text.trim(), rs)
     return rs
   } catch (error) {
     console.error(error)

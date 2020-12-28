@@ -3,7 +3,7 @@ import { debounce } from "./utils"
 import { getGingerCheck } from "./api"
 import { setErrorStatus, setLoadingStatus, setSuccessStatus } from "./statusBar"
 
-// A English grammar Linter.
+// An English grammar Linter.
 const collection = vscode.languages.createDiagnosticCollection("eglint")
 
 export function grammarCheckerInit(context: vscode.ExtensionContext) {
@@ -44,14 +44,23 @@ async function updateDecorations() {
   if (!activeEditor || !text) {
     return
   }
+  resetResult(activeEditor)
 
   // 裁剪句子
-  const matchs = [...text.matchAll(/\b[A-Z].*?(\.|\?|\!)/g)]?.map((match) => ({
-    sentence: match[0] || "",
-    index: match.index || 0,
-    length: match[0].length || 0,
-    range: [match.index || 0, match[0].length || 0],
-  }))
+  const matchs = [
+    ...text.matchAll(
+      /(?<=\W)\b[A-Z](\b[ ]|[a-z]+)\b([a-z]|[A-Z]|\d|\,|\'|\"|\;|\-|\(|\)|\:|\s)*?\b(\.|\?|\!|[ ]{2}|\n{2}|$)(?=\W)/g
+    ),
+  ]
+    ?.filter((match) => !!match?.[0])
+    .map((match) => ({
+      sentence: match[0] || "",
+      index: match.index || 0,
+      length: match[0].length || 0,
+      range: [match.index || 0, match[0].length || 0],
+    }))
+
+  console.log("matchs", matchs)
 
   if (!matchs?.length) {
     return
@@ -61,15 +70,19 @@ async function updateDecorations() {
 
   setLoadingStatus()
 
-  await Promise.all(
+  await Promise.allSettled(
     matchs.map(async (match) => {
       const results = await getGingerCheck(match.sentence || "")
       const diags: vscode.Diagnostic[] =
-        results?.map(({ to, from, suggest }) => {
+        results?.map(({ to, from, suggests }) => {
+          console.log("suggests", suggests)
+
           const startPos = activeEditor.document.positionAt(match.index + from)
           const endPos = activeEditor.document.positionAt(match.index + to)
           return {
-            message: suggest ? "suggest: " + suggest : "",
+            message: suggests?.length
+              ? "suggests: " + suggests.join(" / ")
+              : "",
             range: new vscode.Range(startPos, endPos),
             severity: vscode.DiagnosticSeverity.Error,
             source: "eglint",
@@ -87,4 +100,9 @@ async function updateDecorations() {
       }
     })
   )
+}
+
+function resetResult(activeEditor: vscode.TextEditor) {
+  collection.set(activeEditor.document.uri, [])
+  setSuccessStatus()
 }
