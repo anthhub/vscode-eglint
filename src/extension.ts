@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
   registerStatusBar(context)
   let linter = new LintProvider()
   linter.activate(context.subscriptions)
-  vscode.languages.registerCodeActionsProvider("yaml", linter)
+  vscode.languages.registerCodeActionsProvider("*", linter)
 }
 
 export function deactivate() {}

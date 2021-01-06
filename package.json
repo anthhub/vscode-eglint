@@ -15,27 +15,7 @@
     "*"
   ],
   "main": "./out/extension.js",
-  "contributes": {
-    "languages": [
-      {
-        "id": "yaml",
-        "aliases": [
-          "Yaml",
-          "yaml"
-        ],
-        "extensions": [
-          ".yaml",
-          ".yml"
-        ]
-      }
-    ],
-    "commands": [
-      {
-        "command": "eglint.helloWorld",
-        "title": "Hello World"
-      }
-    ]
-  },
+  "contributes": {},
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
