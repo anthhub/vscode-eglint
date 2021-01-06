@@ -1,8 +1,8 @@
 import axios from "axios"
-import { getSuggestMessage } from "./LintProvider"
 import { getSentenceStorage, getWordDictionary } from "./Store"
 
 export interface IGrammarResult {
+  message: string
   sentence: string
   origin: string
   range: number[]
@@ -14,6 +14,10 @@ export interface IGrammarResult {
 const API_KEY = "6ae0c3a0-afdc-4532-a810-82ded0054236"
 const options = {
   timeout: 5000 * 10,
+}
+
+function getSuggestMessage(origin: string, suggests: string[]) {
+  return `suggests: "${origin}" ==> "${suggests.join(" / ")}" `
 }
 
 export async function getGingerCheck(text: string) {
@@ -34,7 +38,7 @@ async function fetchGinger(text: string): Promise<IGrammarResult[]> {
 
   if (Array.isArray(one)) {
     console.log("hit storage", text, one)
-    // return one
+    return one
   }
   const base = `http://services.gingersoftware.com/Ginger/correct/json/GingerTheText`
   const query = `?apiKey=${API_KEY}&lang=US&clientVersion=2.0&text=${text
@@ -50,15 +54,16 @@ async function fetchGinger(text: string): Promise<IGrammarResult[]> {
         const to = result.To + 1
         const range = [from, to]
         const origin = text.slice(from, to).trim()
+        const suggests =
+          result?.Suggestions?.map((item: { Text: string }) => item.Text) || []
         return {
+          message: getSuggestMessage(origin, suggests),
           sentence: text,
           origin,
           range,
           from,
           to,
-          suggests:
-            result?.Suggestions?.map((item: { Text: string }) => item.Text) ||
-            [],
+          suggests,
         }
       }) || []
 

@@ -26,10 +26,6 @@ function setStatusBar(diagnosticsNum: number) {
   }
 }
 
-export function getSuggestMessage(origin: string, suggests: string[]) {
-  return `suggests: "${origin}" ==> "${suggests.join(" / ")}" `
-}
-
 export default class LintProvider implements vscode.CodeActionProvider {
   private command?: vscode.Disposable
   public static commandId: string = `${EXT_NAME}.runCodeAction`
@@ -113,19 +109,15 @@ export default class LintProvider implements vscode.CodeActionProvider {
       matches.map(async (match) => {
         const results = await getGingerCheck(match.sentence || "")
         const diags: vscode.Diagnostic[] =
-          results?.map(({ to, from, suggests, sentence }) => {
-            console.log("suggests", suggests)
+          results?.map(({ to, from, suggests, message: message1 }) => {
             const [start, end] = [match.index + from, match.index + to]
 
             const range = new vscode.Range(
               textDocument.positionAt(start),
               textDocument.positionAt(end)
             )
-            const origin = text.slice(start, end)
 
-            const message = suggests?.length
-              ? getSuggestMessage(origin, suggests)
-              : ""
+            const message = suggests?.length ? message1 : ""
 
             const diagnostic = new Diagnostic(
               range,
