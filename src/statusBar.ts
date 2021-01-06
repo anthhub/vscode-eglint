@@ -25,7 +25,7 @@ export function registerStatusBar(context: ExtensionContext): void {
 
 export function setSuccessStatus(issue?: string | undefined | null): void {
   setStatusBar(SUCCESS, issue || `English linter`)
-  statusBar.color = new ThemeColor("foreground")
+  statusBar.color = new ThemeColor("panelTitle.activeForeground")
 }
 
 export function setLoadingStatus(issue?: string | undefined | null): void {
@@ -35,7 +35,7 @@ export function setLoadingStatus(issue?: string | undefined | null): void {
 
 export function setErrorStatus(issue?: string | undefined | null): void {
   setStatusBar(WARNING, issue || `errors`)
-  statusBar.color = new ThemeColor("errorForeground")
+  statusBar.color = new ThemeColor("debugConsole.warningForeground")
 }
 
 function setStatusBar(

@@ -55,6 +55,7 @@ async function fetchGinger(text: string): Promise<IGrammarResult[]> {
         const range = [from, to]
         const origin = text.slice(from, to).trim()
         const suggests =
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           result?.Suggestions?.map((item: { Text: string }) => item.Text) || []
         return {
           message: getSuggestMessage(origin, suggests),

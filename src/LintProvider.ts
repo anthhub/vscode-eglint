@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode"
 import { CodeAction, CodeActionKind, Diagnostic } from "vscode"
 import { getGingerCheck } from "./api"
