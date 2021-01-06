@@ -94,9 +94,9 @@
   integrity sha1-mQrWh62LJu9tzDSk9pwz1AyVtnk=
 
 "@types/vscode@^1.52.0":
-  version "1.51.0"
-  resolved "https://registry.npm.taobao.org/@types/vscode/download/@types/vscode-1.51.0.tgz#f2e324d8385db95030b1454fd1f043618e08097d"
-  integrity sha1-8uMk2DhduVAwsUVP0fBDYY4ICX0=
+  version "1.52.0"
+  resolved "https://npm-registry.llsengineer.com/@types%2fvscode/-/vscode-1.52.0.tgz#61917968dd403932127fc4004a21fd8d69e4f61c"
+  integrity sha512-Kt3bvWzAvvF/WH9YEcrCICDp0Z7aHhJGhLJ1BxeyNP6yRjonWqWnAIh35/pXAjswAnWOABrYlF7SwXR9+1nnLA==
 
 "@typescript-eslint/eslint-plugin@^4.1.1":
   version "4.10.0"
@@ -1342,6 +1342,31 @@ v8-compile-cache@^2.0.3:
   version "2.2.0"
   resolved "https://registry.npm.taobao.org/v8-compile-cache/download/v8-compile-cache-2.2.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fv8-compile-cache%2Fdownload%2Fv8-compile-cache-2.2.0.tgz#9471efa3ef9128d2f7c6a7ca39c4dd6b5055b132"
   integrity sha1-lHHvo++RKNL3xqfKOcTda1BVsTI=
+
+vscode-jsonrpc@6.0.0:
+  version "6.0.0"
+  resolved "https://npm-registry.llsengineer.com/vscode-jsonrpc/-/vscode-jsonrpc-6.0.0.tgz#108bdb09b4400705176b957ceca9e0880e9b6d4e"
+  integrity sha1-EIvbCbRABwUXa5V87KngiA6bbU4=
+
+vscode-languageserver-protocol@3.16.0:
+  version "3.16.0"
+  resolved "https://npm-registry.llsengineer.com/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.16.0.tgz#34135b61a9091db972188a07d337406a3cdbe821"
+  integrity sha1-NBNbYakJHblyGIoH0zdAajzb6CE=
+  dependencies:
+    vscode-jsonrpc "6.0.0"
+    vscode-languageserver-types "3.16.0"
+
+vscode-languageserver-types@3.16.0:
+  version "3.16.0"
+  resolved "https://npm-registry.llsengineer.com/vscode-languageserver-types/-/vscode-languageserver-types-3.16.0.tgz#ecf393fc121ec6974b2da3efb3155644c514e247"
+  integrity sha1-7POT/BIexpdLLaPvsxVWRMUU4kc=
+
+vscode-languageserver@^7.0.0:
+  version "7.0.0"
+  resolved "https://npm-registry.llsengineer.com/vscode-languageserver/-/vscode-languageserver-7.0.0.tgz#49b068c87cfcca93a356969d20f5d9bdd501c6b0"
+  integrity sha512-60HTx5ID+fLRcgdHfmz0LDZAXYEV68fzwG0JWwEPBode9NuMYTIxuYXPg4ngO8i8+Ou0lM7y6GzaYWbiDL0drw==
+  dependencies:
+    vscode-languageserver-protocol "3.16.0"
 
 vscode-test@^1.4.0:
   version "1.4.1"

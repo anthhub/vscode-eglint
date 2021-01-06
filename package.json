@@ -3,7 +3,7 @@
   "displayName": "eglint",
   "description": "An English grammar Linter",
   "publisher": "anthhub",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "icon": "logo.png",
   "engines": {
     "vscode": "^1.52.0"
@@ -16,6 +16,19 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "languages": [
+      {
+        "id": "yaml",
+        "aliases": [
+          "Yaml",
+          "yaml"
+        ],
+        "extensions": [
+          ".yaml",
+          ".yml"
+        ]
+      }
+    ],
     "commands": [
       {
         "command": "eglint.helloWorld",
@@ -45,6 +58,7 @@
     "vscode-test": "^1.4.0"
   },
   "dependencies": {
-    "axios": "^0.21.0"
+    "axios": "^0.21.0",
+    "vscode-languageserver": "^7.0.0"
   }
 }
